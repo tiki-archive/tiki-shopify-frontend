@@ -4,7 +4,6 @@
  */
 
 import { DiscountReq } from '../../../interface/discount-req'
-import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
 import { Page, Layout, PageActions, Card } from '@shopify/polaris'
@@ -33,21 +32,10 @@ export function DiscountProductDetail() {
             "shippingDiscounts": false
         }
     }
-    
-    const app = useAppBridge();
-    const redirect = Redirect.create(app);
-    const authenticatedFetch = useAuthenticatedFetch(app);
-
-    const duplicateDiscount = () => console.log(discount)
 
     return (
         <Page
-        title="Product Discount"
-        primaryAction={{
-            content: 'Duplicate',
-            onAction: duplicateDiscount,
-        }}
-    >
+        title="Product Discount">
         <Layout>
             <Layout.Section>
                     <Card>
@@ -79,14 +67,6 @@ export function DiscountProductDetail() {
                             <p>{discount.endsAt ? `Ends at: ${discount.endsAt.toLocaleDateString()}`: ''}</p>
                         </Card.Section>
                     </Card>
-            </Layout.Section>
-            <Layout.Section>
-                <PageActions
-                    primaryAction={{
-                        content: 'Duplicate',
-                        onAction: duplicateDiscount,
-                    }}
-                />
             </Layout.Section>
         </Layout>
     </Page>

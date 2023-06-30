@@ -12,12 +12,12 @@ import {
   Link,
   Heading
 } from '@shopify/polaris'
-import { TitleBar } from '@shopify/app-bridge-react'
+// import { TitleBar } from '@shopify/app-bridge-react'
 
 export function HomePage () {
   return (
     <Page narrowWidth>
-      <TitleBar title="TIKI" />
+      {/* <TitleBar title="TIKI" /> */}
       <Layout>
         <Layout.Section>
           <Card sectioned>

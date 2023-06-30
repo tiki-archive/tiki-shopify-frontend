@@ -3,12 +3,9 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
-import { Redirect } from '@shopify/app-bridge/actions'
 import { Card, Layout, Page, PageActions } from '@shopify/polaris'
 
 import { DiscountReq } from '../../../interface/discount-req'
-import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
 
 export function DiscountOrderDetail() {
 
@@ -35,19 +32,9 @@ export function DiscountOrderDetail() {
         }
     }
     
-    const app = useAppBridge();
-    const redirect = Redirect.create(app);
-    const authenticatedFetch = useAuthenticatedFetch(app);
-
-    const duplicateDiscount = () => console.log(discount)
-
     return (
         <Page
             title="Order Discount"
-            primaryAction={{
-                content: 'Duplicate',
-                onAction: duplicateDiscount,
-            }}
         >
             <Layout>
                 <Layout.Section>
@@ -80,14 +67,6 @@ export function DiscountOrderDetail() {
                                 <p>{discount.endsAt ? `Ends at: ${discount.endsAt.toLocaleDateString()}`: ''}</p>
                             </Card.Section>
                         </Card>
-                </Layout.Section>
-                <Layout.Section>
-                    <PageActions
-                        primaryAction={{
-                            content: 'Duplicate',
-                            onAction: duplicateDiscount,
-                        }}
-                    />
                 </Layout.Section>
             </Layout>
         </Page>

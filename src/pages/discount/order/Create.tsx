@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
+// import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
 import { Redirect } from '@shopify/app-bridge/actions'
 
 import { useForm, useField } from '@shopify/react-form'
@@ -23,9 +23,9 @@ import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
 
 export function DiscountOrderCreate() {
 
-    const app = useAppBridge();
-    const redirect = Redirect.create(app);
-    const authenticatedFetch = useAuthenticatedFetch(app);
+    // const app = useAppBridge();
+    // const redirect = Redirect.create(app);
+    // const authenticatedFetch = useAuthenticatedFetch(app);
 
     const {
         fields: {
@@ -84,17 +84,17 @@ export function DiscountOrderCreate() {
                     shippingDiscounts: form.shippingDiscounts
                 },
             }
-            const response = await authenticatedFetch("/api/discount", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    discount
-                }),
-            });
-            debugger
-            redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
-                name: Redirect.ResourceType.Discount,
-            });
+            // const response = await authenticatedFetch("/api/discount", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({
+            //         discount
+            //     }),
+            // });
+            // debugger
+            // redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
+            //     name: Redirect.ResourceType.Discount,
+            // });
             return { status: "success" }
         },
     })
