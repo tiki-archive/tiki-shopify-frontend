@@ -21,7 +21,6 @@ export function DiscountProductDetail() {
             "discountValue": 10,
             "minValue": 100,
             "minQty": 0,
-            "maxUse": 0,
             "onePerUser": true,
             "products": [],
             "collections": []

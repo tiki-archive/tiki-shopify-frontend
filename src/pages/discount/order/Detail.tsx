@@ -20,8 +20,7 @@ export function DiscountOrderDetail() {
             "discountValue": 10,
             "minValue": 100,
             "minQty": 0,
-            "maxUse": 0,
-            "onePerUser": true,
+            "onePerUser": false,
             "products": [],
             "collections": []
         },
