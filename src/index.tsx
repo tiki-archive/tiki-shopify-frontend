@@ -3,7 +3,10 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-import ReactDOM from 'react-dom'
 import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('app'))
+import { createRoot } from 'react-dom/client';
+const container = document.getElementById('app');
+const root = createRoot(container!);
+console.log('load');
+root.render(<App />);
