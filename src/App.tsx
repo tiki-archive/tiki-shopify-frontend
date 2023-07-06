@@ -17,13 +17,13 @@ export default function App() {
   return (
     <PolarisProvider>
       <BrowserRouter>
-        {/* <AppBridgeProvider> */}
+        <AppBridgeProvider>
           <DiscountProvider>
             <QueryProvider>
               <AppRouter />
             </QueryProvider>
           </DiscountProvider>
-        {/* </AppBridgeProvider> */}
+        </AppBridgeProvider>
       </BrowserRouter>
     </PolarisProvider>
   );
