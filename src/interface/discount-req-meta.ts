@@ -10,7 +10,6 @@ export interface DiscountReqMeta {
   discountValue: number;
   minValue: number;
   minQty: number;
-  maxUse: number;
   onePerUser: boolean;
   products: Array<string>;
   collections: Array<string>;

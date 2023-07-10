@@ -1,6 +1,12 @@
-import ReactDOM from 'react-dom'
+/*
+ * Copyright (c) TIKI Inc.
+ * MIT license. See LICENSE file in root directory.
+ */
 
 import App from './App'
-import React from 'react'
 
-ReactDOM.render(<App />, document.getElementById('app'))
+import { createRoot } from 'react-dom/client';
+const container = document.getElementById('app');
+const root = createRoot(container!);
+console.log('load');
+root.render(<App />);
