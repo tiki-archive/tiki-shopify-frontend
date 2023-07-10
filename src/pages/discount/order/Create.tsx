@@ -10,6 +10,7 @@ import { AppliesTo, RequirementType } from '@shopify/discount-app-components'
 
 import { Card, Layout, Page, PageActions, TextField } from '@shopify/polaris'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
+import { getSessionToken } from "@shopify/app-bridge/utilities";
 
 import { DiscountReq } from '../../../interface/discount-req'
 import {
@@ -22,10 +23,6 @@ import {
 } from '../../../components'
 
 export function DiscountOrderCreate() {
-
-    const app = useAppBridge();
-    const redirect = Redirect.create(app);
-    const authenticatedFetch = useAuthenticatedFetch(app);
 
     const [fields, setFields] = useState<DiscountReq>({
         "title": "",
@@ -50,20 +47,22 @@ export function DiscountOrderCreate() {
     })
 
     const submit = async () => {
-        console.log(fields);
-        let response = await authenticatedFetch("https://127.0.0.1:8787/api/latest/discount", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(fields)
-            });
-        	const data = (await response.json());
-            // if (remoteErrors.length > 0) {
-            //     return { status: "fail", errors: remoteErrors };
-            // }
-            redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
-                name: Redirect.ResourceType.Discount,
-            });
-            return { status: "success" };
+        const app = useAppBridge();
+        const redirect = Redirect.create(app);
+        const authenticatedFetch = useAuthenticatedFetch(app);
+        let response = await authenticatedFetch("http://127.0.0.1:8787/api/latest/discount", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(fields)
+        });
+        const data = (await response.json());
+        // if (remoteErrors.length > 0) {
+        //     return { status: "fail", errors: remoteErrors };
+        // }
+        redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
+            name: Redirect.ResourceType.Discount,
+        });
+        return { status: "success" };
     }
 
     return (

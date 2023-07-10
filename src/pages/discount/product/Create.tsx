@@ -3,7 +3,8 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-import { useForm, useField, SubmitResult } from '@shopify/react-form'
+import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
+
 import { AppliesTo, DiscountMethod, RequirementType, SummaryCard, } from '@shopify/discount-app-components'
 import { Card, Layout, Page, PageActions, TextField } from '@shopify/polaris'
 
@@ -23,11 +24,6 @@ import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
 import { BaseResource, Resource } from '@shopify/app-bridge/actions/ResourcePicker'
 
 export function DiscountProductCreate() {
-
-    // const app = useAppBridge();
-    // const redirect = Redirect.create(app);
-    // const authenticatedFetch = useAuthenticatedFetch(app);
-
 
     const [fields, setFields] = useState<DiscountReq>({
         "title": "",
@@ -51,7 +47,25 @@ export function DiscountProductCreate() {
         }
     })
 
-    const submit = () => console.log(fields);
+    
+    const submit = async () => {
+        const app = useAppBridge();
+        const redirect = Redirect.create(app);
+        const authenticatedFetch = useAuthenticatedFetch(app);
+        let response = await authenticatedFetch("http://127.0.0.1:8787/api/latest/discount", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(fields)
+        });
+        const data = (await response.json());
+        // if (remoteErrors.length > 0) {
+        //     return { status: "fail", errors: remoteErrors };
+        // }
+        redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
+            name: Redirect.ResourceType.Discount,
+        });
+        return { status: "success" };
+    }
 
     return (
         <Page
@@ -171,6 +185,14 @@ export function DiscountProductCreate() {
                                 <p>{fields.endsAt ? `Ends at: ${fields.endsAt!.toLocaleDateString()}`: ''}</p>
                             </Card.Section>
                         </Card>
+                </Layout.Section>
+                <Layout.Section>
+                    <PageActions
+                        primaryAction={{
+                            content: 'Save discount',
+                            onAction: submit,
+                        }}
+                    />
                 </Layout.Section>
             </Layout>
         </Page>
