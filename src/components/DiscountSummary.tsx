@@ -2,7 +2,7 @@
  * Copyright (c) TIKI Inc.
  * MIT license. See LICENSE file in root directory.
  */
-
+import React from 'react';
 import { SummaryCard, DiscountMethod } from "@shopify/discount-app-components";
 
 export interface DiscountSummaryProps{

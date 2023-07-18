@@ -7,6 +7,7 @@ import { DiscountReq } from '../../../interface/discount-req'
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
 import { Page, Layout, PageActions, Card } from '@shopify/polaris'
+import React from 'react'
 
 export function DiscountProductDetail() {
 

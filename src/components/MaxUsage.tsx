@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-import { UsageLimitsCard } from "@shopify/discount-app-components";
+import React from 'react';
 import { Checkbox } from "@shopify/polaris";
 import { useCallback } from "react";
 import { useState } from "react";

@@ -9,6 +9,7 @@ import { AppliesTo } from '@shopify/discount-app-components';
 import { RadioButton, TextField, Button, ResourceList, Icon, ResourceItem, Thumbnail, SkeletonThumbnail } from '@shopify/polaris';
 import { useState, useCallback } from 'react';
 import { BaseResource, Collection, Product, Resource, ResourceType, SelectAction, SelectPayload } from '@shopify/app-bridge/actions/ResourcePicker';
+import React from 'react';
 
 type ResourceOptions = 'all' | 'products' | 'collections'
 

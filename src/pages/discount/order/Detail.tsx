@@ -3,6 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
+import React from 'react';
 import { Card, Layout, Page, PageActions } from '@shopify/polaris'
 
 import { DiscountReq } from '../../../interface/discount-req'

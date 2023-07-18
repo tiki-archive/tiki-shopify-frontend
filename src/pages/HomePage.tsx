@@ -12,6 +12,7 @@ import {
   Link,
   Heading
 } from '@shopify/polaris'
+import React from 'react'
 // import { TitleBar } from '@shopify/app-bridge-react'
 
 export function HomePage () {

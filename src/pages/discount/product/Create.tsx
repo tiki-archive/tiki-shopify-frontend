@@ -3,6 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
+
 import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
 
 import { AppliesTo, DiscountMethod, RequirementType, SummaryCard, } from '@shopify/discount-app-components'
@@ -22,9 +23,14 @@ import { useState } from "react"
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
 import { BaseResource, Resource } from '@shopify/app-bridge/actions/ResourcePicker'
+import React from 'react'
 
 export function DiscountProductCreate() {
 
+    const app = useAppBridge();
+    const redirect = Redirect.create(app);
+    const authenticatedFetch = useAuthenticatedFetch(app);
+    
     const [fields, setFields] = useState<DiscountReq>({
         "title": "",
         "startsAt": new Date(),
@@ -49,10 +55,7 @@ export function DiscountProductCreate() {
 
     
     const submit = async () => {
-        const app = useAppBridge();
-        const redirect = Redirect.create(app);
-        const authenticatedFetch = useAuthenticatedFetch(app);
-        let response = await authenticatedFetch("http://127.0.0.1:8787/api/latest/discount", {
+        let response = await authenticatedFetch("https://tiki.shopify.brgweb.com.br/api/latest/discount", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(fields)

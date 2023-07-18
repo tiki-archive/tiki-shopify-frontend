@@ -3,6 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
+import React from 'react';
 import { DiscountMethod, SummaryCard } from "@shopify/discount-app-components"
 
 export function SummarySection({title = "", startsAt = "", endsAt = undefined}){

@@ -3,6 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
+import React from 'react';
 import { RequirementType, MinimumRequirementsCard, AppliesTo, DiscountMethod } from "@shopify/discount-app-components";
 import { CurrencyCode } from "@shopify/react-i18n";
 import { useState } from "react";

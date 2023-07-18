@@ -6,7 +6,6 @@
 import React, { useMemo, useState } from 'react'
 import { To, useLocation, useNavigate } from 'react-router-dom'
 import { Provider } from '@shopify/app-bridge-react'
-import { Banner, Layout, Page } from '@shopify/polaris'
 import { AppConfigV2 } from '@shopify/app-bridge'
 
 export function AppBridgeProvider(props: { children: React.ReactNode }) {

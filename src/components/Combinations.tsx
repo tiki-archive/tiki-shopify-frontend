@@ -3,6 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
+import React from 'react';
 import { CombinationCard, DiscountClass } from "@shopify/discount-app-components";
 import { useCallback, useState } from "react";
 

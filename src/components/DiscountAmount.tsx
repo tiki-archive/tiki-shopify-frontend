@@ -3,6 +3,7 @@
  * MIT license. See LICENSE file in root directory.
  */
 
+import React from 'react';
 import { TextField } from '@shopify/polaris';
 import { useCallback, useState } from 'react';
 import { DiscountAmountBtns } from './DiscountAmountBtns';

@@ -5,6 +5,7 @@
 
 import { useCallback, useState } from "react";
 import { ActiveDatesCard as ActiveDates} from "@shopify/discount-app-components";
+import React from "react";
 
 export interface ActiveDatesCardProps{
     onChange: (startsAt: string, endsAt: string) => void

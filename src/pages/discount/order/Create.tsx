@@ -2,6 +2,8 @@
  * Copyright (c) TIKI Inc.
  * MIT license. See LICENSE file in root directory.
  */
+
+import React from 'react';
 import { useState } from "react"
 
 import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
@@ -10,7 +12,6 @@ import { AppliesTo, RequirementType } from '@shopify/discount-app-components'
 
 import { Card, Layout, Page, PageActions, TextField } from '@shopify/polaris'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
-import { getSessionToken } from "@shopify/app-bridge/utilities";
 
 import { DiscountReq } from '../../../interface/discount-req'
 import {
@@ -24,6 +25,10 @@ import {
 
 export function DiscountOrderCreate() {
 
+    const app = useAppBridge();
+    const redirect = Redirect.create(app);
+    const authenticatedFetch = useAuthenticatedFetch(app);
+        
     const [fields, setFields] = useState<DiscountReq>({
         "title": "",
         "startsAt": new Date(),
@@ -47,10 +52,7 @@ export function DiscountOrderCreate() {
     })
 
     const submit = async () => {
-        const app = useAppBridge();
-        const redirect = Redirect.create(app);
-        const authenticatedFetch = useAuthenticatedFetch(app);
-        let response = await authenticatedFetch("http://127.0.0.1:8787/api/latest/discount", {
+        let response = await authenticatedFetch("https://tiki.shopify.brgweb.com.br/api/latest/discount", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(fields)
