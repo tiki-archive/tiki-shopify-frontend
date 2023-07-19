@@ -6,8 +6,8 @@
 
 import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
 
-import { AppliesTo, DiscountMethod, RequirementType, SummaryCard, } from '@shopify/discount-app-components'
-import { Card, Layout, Page, PageActions, TextField } from '@shopify/polaris'
+import { AppliesTo, RequirementType } from '@shopify/discount-app-components'
+import { Card, Layout, Page, PageActions } from '@shopify/polaris'
 
 import { DiscountReq } from '../../../interface/discount-req'
 import {
@@ -16,20 +16,17 @@ import {
     DiscountAmount,
     CombinationsCard,
     AppliesToChoices,
-    TitleAndDescription,
-    SummarySection
-} from '../../../components'
+    TitleAndDescription} from '../../../components'
 import { useState } from "react"
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
-import { BaseResource, Resource } from '@shopify/app-bridge/actions/ResourcePicker'
-import React from 'react'
+import { Resource } from '@shopify/app-bridge/actions/ResourcePicker'
 
 export function DiscountProductCreate() {
 
     const app = useAppBridge();
     const redirect = Redirect.create(app);
-    const authenticatedFetch = useAuthenticatedFetch(app);
+    const authenticatedFetch = useAuthenticatedFetch();
     
     const [fields, setFields] = useState<DiscountReq>({
         "title": "",
@@ -61,9 +58,7 @@ export function DiscountProductCreate() {
             body: JSON.stringify(fields)
         });
         const data = (await response.json());
-        // if (remoteErrors.length > 0) {
-        //     return { status: "fail", errors: remoteErrors };
-        // }
+        console.log(JSON.stringify(data));
         redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
             name: Redirect.ResourceType.Discount,
         });

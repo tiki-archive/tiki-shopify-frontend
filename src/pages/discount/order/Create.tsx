@@ -3,14 +3,13 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-import React from 'react';
 import { useState } from "react"
 
 import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
 import { Redirect } from '@shopify/app-bridge/actions'
 import { AppliesTo, RequirementType } from '@shopify/discount-app-components'
 
-import { Card, Layout, Page, PageActions, TextField } from '@shopify/polaris'
+import { Card, Layout, Page, PageActions } from '@shopify/polaris'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
 
 import { DiscountReq } from '../../../interface/discount-req'
@@ -27,7 +26,7 @@ export function DiscountOrderCreate() {
 
     const app = useAppBridge();
     const redirect = Redirect.create(app);
-    const authenticatedFetch = useAuthenticatedFetch(app);
+    const authenticatedFetch = useAuthenticatedFetch();
         
     const [fields, setFields] = useState<DiscountReq>({
         "title": "",
@@ -52,15 +51,15 @@ export function DiscountOrderCreate() {
     })
 
     const submit = async () => {
+        const body = JSON.stringify(fields);
         let response = await authenticatedFetch("https://tiki.shopify.brgweb.com.br/api/latest/discount", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(fields)
+            body
         });
         const data = (await response.json());
-        // if (remoteErrors.length > 0) {
-        //     return { status: "fail", errors: remoteErrors };
-        // }
+        console.log(JSON.stringify(data));
+        console.log(body);
         redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
             name: Redirect.ResourceType.Discount,
         });
