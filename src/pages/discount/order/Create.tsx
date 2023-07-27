@@ -21,6 +21,7 @@ import {
     TitleAndDescription,
     MaxUsageCheckbox,
 } from '../../../components'
+import React from "react"
 
 export function DiscountOrderCreate() {
 
@@ -98,8 +99,8 @@ export function DiscountOrderCreate() {
                                 />
                             </Card.Section>
                             <Card.Section title="Usage limit">
-                            <MaxUsageCheckbox onChange={({ once }) => {
-                                fields.metafields.onePerUser = once === true
+                            <MaxUsageCheckbox onChange={({ oncePerCustomer }) => {
+                                fields.metafields.onePerUser = oncePerCustomer === true
                                 setFields(fields)
                             }} />
                             </Card.Section>

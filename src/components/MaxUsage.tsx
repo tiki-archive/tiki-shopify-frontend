@@ -13,6 +13,7 @@ export const MaxUsageCheckbox = ({onChange = console.log}) => {
   
     const oncePerCustomerUpdate = useCallback(
         (value: boolean) => {
+            console.log(value)
             setOncePerCustomer(value)
             onChange({oncePerCustomer: value})
         },
@@ -22,6 +23,7 @@ export const MaxUsageCheckbox = ({onChange = console.log}) => {
     return (
       <Checkbox
             value='oncePerCustomer'
+            checked={oncePerCustomer}
             onChange={oncePerCustomerUpdate} 
             label='Limit to one use per customer'
       />

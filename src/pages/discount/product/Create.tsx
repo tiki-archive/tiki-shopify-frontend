@@ -21,6 +21,7 @@ import { useState } from "react"
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
 import { Resource } from '@shopify/app-bridge/actions/ResourcePicker'
+import React from 'react'
 
 export function DiscountProductCreate() {
 
