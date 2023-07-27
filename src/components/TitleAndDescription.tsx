@@ -13,6 +13,7 @@ export function TitleAndDescription({onChange = console.log}){
     return (
         <>
             <TextField
+            helpText='A short title for the discount. Will be shown to the customer'
             label='Discount Title'
             autoComplete=''
             value={title}
@@ -25,6 +26,7 @@ export function TitleAndDescription({onChange = console.log}){
             } } />
             <TextField
                 label='Description'
+                helpText='Internal description of the discount. Will NOT be shown to the customer'
                 autoComplete=''
                 value={description}
                 onChange={(value) => {
