@@ -1,110 +1,70 @@
-import React from 'react'
+/*
+ * Copyright (c) TIKI Inc.
+ * MIT license. See LICENSE file in root directory.
+ */
 
-import { useForm, useField, SubmitResult } from '@shopify/react-form'
-import { AppliesTo, DiscountMethod, RequirementType, SummaryCard, } from '@shopify/discount-app-components'
-import { LegacyCard, Layout, Page, PageActions, TextField } from '@shopify/polaris'
+
+import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
+
+import { AppliesTo, RequirementType } from '@shopify/discount-app-components'
+import { Card, Layout, Page, PageActions } from '@shopify/polaris'
 
 import { DiscountReq } from '../../../interface/discount-req'
 import {
     MinReqsCard,
     ActiveDatesCard,
     DiscountAmount,
-    MaxUsageCard,
     CombinationsCard,
-    ErrorBanner,
     AppliesToChoices,
-    TitleAndDescription,
-    SummarySection
-} from '../../../components'
-import { useAppBridge } from '@shopify/app-bridge-react/useAppBridge'
+    TitleAndDescription} from '../../../components'
+import { useState } from "react"
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
-import { BaseResource, Resource } from '@shopify/app-bridge/actions/ResourcePicker'
+import { Resource } from '@shopify/app-bridge/actions/ResourcePicker'
+import React from 'react'
 
 export function DiscountProductCreate() {
 
     const app = useAppBridge();
     const redirect = Redirect.create(app);
-    const authenticatedFetch = useAuthenticatedFetch(app);
-
-    const {
-        fields: {
-            title,
-            startsAt,
-            endsAt,
-            description,
-            discountType,
-            discountValue,
-            minValue,
-            minQty,
-            maxUse,
-            onePerUser,
-            products,
-            collections,
-            orderDiscounts,
-            productDiscounts,
-            shippingDiscounts,
+    const authenticatedFetch = useAuthenticatedFetch();
+    
+    const [fields, setFields] = useState<DiscountReq>({
+        "title": "",
+        "startsAt": new Date(),
+        "endsAt": null,
+        "metafields": {
+            "type": "product",
+            "description": "",
+            "discountType": "amount",
+            "discountValue": 10,
+            "minValue": 0,
+            "minQty": 0,
+            "onePerUser": true,
+            "products": [],
+            "collections": []
         },
-        submit,
-        submitting,
-        dirty,
-        submitErrors
-    } = useForm({
-        fields: {
-            title: useField(''),
-            startsAt: useField(new Date()),
-            endsAt: useField<Date | null>(null),
-            description: useField(''),
-            discountType: useField<'percentage' | 'amount'>('amount'),
-            discountValue: useField(0.00),
-            minValue: useField(0.00),
-            minQty: useField(0),
-            maxUse: useField(0),
-            onePerUser: useField(true),
-            products: useField<string[]>([]),
-            collections: useField<string[]>([]),
-            orderDiscounts: useField(false),
-            productDiscounts: useField(false),
-            shippingDiscounts: useField(false),
-        },
-        onSubmit: async (form) => {
-            const discount: DiscountReq = {
-                title: form.title,
-                startsAt: form.startsAt,
-                endsAt: form.endsAt,
-                metafields: {
-                    type: 'product',
-                    description: form.description,
-                    discountType: form.discountType,
-                    discountValue: form.discountValue,
-                    minValue: form.minValue,
-                    minQty: form.minQty,
-                    maxUse: form.maxUse,
-                    onePerUser: form.onePerUser,
-                    products: form.products,
-                    collections: form.collections,
-                },
-                combinesWith: {
-                    orderDiscounts: form.orderDiscounts,
-                    productDiscounts: form.productDiscounts,
-                    shippingDiscounts: form.shippingDiscounts
-                },
-            }
-            const response = await authenticatedFetch("/api/discount", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    discount
-                }),
-            });
-            const data = (await response.text());
-            debugger
-            redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
-                name: Redirect.ResourceType.Discount,
-            });
-            return { status: "success" }
-        },
+        "combinesWith": {
+            "orderDiscounts": false,
+            "productDiscounts": false,
+            "shippingDiscounts": false
+        }
     })
+
+    
+    const submit = async () => {
+        let response = await authenticatedFetch("https://tiki.shopify.brgweb.com.br/api/latest/discount", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(fields)
+        });
+        const data = (await response.json());
+        console.log(JSON.stringify(data));
+        redirect.dispatch(Redirect.Action.ADMIN_SECTION, {
+            name: Redirect.ResourceType.Discount,
+        });
+        return { status: "success" };
+    }
 
     return (
         <Page
@@ -115,117 +75,115 @@ export function DiscountProductCreate() {
             }}
         >
             <Layout>
-                <ErrorBanner submitErrors={submitErrors} />
                 <Layout.Section>
                     <form>
-                        <LegacyCard>
-                            <LegacyCard.Section title="Title">
+                        <Card>
+                            <Card.Section title="Title">
                                 <TitleAndDescription onChange={(values) => {
-                                    title.value = values.title
-                                    description.value = values.description
+                                    fields.title = values.title
+                                    fields.metafields.description = values.description
+                                    setFields(fields)
                                 }} />
-                            </LegacyCard.Section>
-                            <LegacyCard.Section title="Value">
+                            </Card.Section>
+                            <Card.Section title="Value">
                                 <DiscountAmount
                                     onChange={({ type, value }) => {
                                         if (type !== undefined) {
-                                            discountType.value = type
+                                            fields.metafields.discountType = type
                                         }
                                         if (value !== undefined) {
-                                            discountValue.value = value
+                                            fields.metafields.discountValue = value
                                         }
+                                        setFields(fields)
                                     }}
                                 />
-                            </LegacyCard.Section>
-                            <LegacyCard.Section title="Applies To">
-                                <AppliesToChoices onChange={({resource, list}) => {
-                                    console.log({ resource, list })
-
-                                    switch (resource) {
+                            </Card.Section>
+                            <Card.Section title="Applies To">
+                                <AppliesToChoices onChange={(list: Resource[], resource: 'all' | 'products' | 'collections') => {
+                                     switch (resource) {
                                         case 'all':
-                                            products.value = []
+                                            fields.metafields.products = []
+                                            fields.metafields.collections = []
                                             break
                                         case 'products':
-                                            products.value = list.map((p) => p.id)
+                                            fields.metafields.products = list.map((p) => p.id)
+                                            fields.metafields.collections = []
                                             break
                                         case 'collections':
-                                            collections.value = list.map((p) => p.id)
+                                            fields.metafields.collections = list.map((p) => p.id)
+                                            fields.metafields.products = []
                                             break
                                     }
+                                    setFields(fields)
                                 }}
                                 />
-                            </LegacyCard.Section>
-                        </LegacyCard>
+                            </Card.Section>
+                        </Card>
                         <MinReqsCard
                             appliesTo={AppliesTo.Products}
                             type={RequirementType.None}
-                            subTotal={minValue.value}
-                            qty={minQty.value}
+                            subTotal={fields.metafields.minValue}
+                            qty={fields.metafields.minQty}
                             onChange={({ type, value, qty }) => {
                                 switch (type) {
                                     case RequirementType.Quantity:
-                                        minQty.value = qty
-                                        minValue.value = 0
+                                        fields.metafields.minQty = qty
+                                        fields.metafields.minValue = 0
                                         break;
                                     case RequirementType.Subtotal:
-                                        minValue.value = value
-                                        minQty.value = 0
+                                        fields.metafields.minValue = value
+                                        fields.metafields.minQty = 0
                                         break;
                                     case RequirementType.None:
-                                        minValue.value = 0
-                                        minQty.value = 0
+                                        fields.metafields.minValue = 0
+                                        fields.metafields.minQty = 0
                                         break;
                                 }
+                                setFields(fields)
                             }}
                         />
-                        <MaxUsageCard onChange={({ total, once }) => {
-                            maxUse.value = total ? total : 0
-                            onePerUser.value = once === true
-                        }} />
                         <CombinationsCard onChange={(combinations) => {
-                            orderDiscounts.value = combinations.orderDiscounts
-                            productDiscounts.value = combinations.productDiscounts
-                            shippingDiscounts.value = combinations.shippingDiscounts
+                            fields.combinesWith.orderDiscounts = combinations.orderDiscounts
+                            fields.combinesWith.productDiscounts = combinations.productDiscounts
+                            fields.combinesWith.shippingDiscounts = combinations.shippingDiscounts
+                            setFields(fields)
                         }} />
                         <ActiveDatesCard
                             onChange={(s: string, e: string) => {
-                                startsAt.value = new Date(s)
-                                endsAt.value = e ? new Date(e) : null
+                                fields.startsAt = new Date(s)
+                                fields.endsAt = e ? new Date(e) : null
+                                setFields(fields)
                             }}
-                            startsAt={startsAt.value.toUTCString()}
-                            endsAt={endsAt.value ? endsAt.value.toUTCString : ''} />
+                            startsAt={fields.startsAt.toUTCString()}
+                            endsAt={fields.endsAt ? fields.endsAt.toUTCString() : ''} />
                     </form>
                 </Layout.Section>
                 <Layout.Section secondary>
-                        <LegacyCard>
-                            <LegacyCard.Section title="Title">
-                                <p>Title: {title.value}</p>
-                                <p>Description: {description.value}</p>
-                            </LegacyCard.Section>
-                            <LegacyCard.Section title="Value">
-                                <p>Discount Type: {discountType.value}</p>
-                                <p>Discount Value: {discountType.value === 'amount' ? '$':''} {discountValue.value}{discountType.value === 'percentage' ? '%':''}</p>
-                            </LegacyCard.Section>
-                            <LegacyCard.Section title="Minimum Requirements">
-                                <p>{minValue ? `Minimum value:${minValue}` : ''}</p>
-                                <p>{minQty ? `Minimum quantity:${minQty}` : ''}</p>
-                            </LegacyCard.Section>
-                            <LegacyCard.Section title="Max Usage">
-                                <p>Once per customer? </p>
-                                <p>{onePerUser ? 'Yes': 'No'}</p>
-                            </LegacyCard.Section>
-                        </LegacyCard>
-                        <LegacyCard>
-                            <LegacyCard.Section title="Combines with">
-                                <p>Order Discounts: {orderDiscounts.value ? 'Yes': 'No'}</p>
-                                <p>Product Discounts: {productDiscounts.value ? 'Yes': 'No'}</p>
-                                <p>Shipping Discounts: {shippingDiscounts.value ? 'Yes': 'No'}</p>
-                            </LegacyCard.Section>
-                            <LegacyCard.Section title="Active dates">
-                                <p>Starts at: {startsAt.value.toLocaleTimeString()}</p>
-                                <p>{endsAt.value ? `Ends at: ${endsAt.value!.toLocaleDateString()}`: ''}</p>
-                            </LegacyCard.Section>
-                        </LegacyCard>
+                        <Card>
+                            <Card.Section title="Title">
+                                <p>Title: {fields.title}</p>
+                                <p>Description: {fields.metafields.description}</p>
+                            </Card.Section>
+                            <Card.Section title="Value">
+                                <p>Discount Type: {fields.metafields.discountType}</p>
+                                <p>Discount Value: {fields.metafields.discountType === 'amount' ? '$':''} {fields.metafields.discountValue}{fields.metafields.discountType === 'percentage' ? '%':''}</p>
+                            </Card.Section>
+                            <Card.Section title="Minimum Requirements">
+                                <p>{fields.metafields.minValue ? `Minimum value:${fields.metafields.minValue}` : ''}</p>
+                                <p>{fields.metafields.minQty ? `Minimum quantity:${fields.metafields.minQty}` : ''}</p>
+                            </Card.Section>
+                        </Card>
+                        <Card>
+                            <Card.Section title="Combines with">
+                                <p>Order Discounts: {fields.combinesWith.orderDiscounts ? 'Yes': 'No'}</p>
+                                <p>Product Discounts: {fields.combinesWith.productDiscounts ? 'Yes': 'No'}</p>
+                                <p>Shipping Discounts: {fields.combinesWith.shippingDiscounts ? 'Yes': 'No'}</p>
+                            </Card.Section>
+                            <Card.Section title="Active dates">
+                                <p>Starts at: {fields.startsAt.toLocaleTimeString()}</p>
+                                <p>{fields.endsAt ? `Ends at: ${fields.endsAt!.toLocaleDateString()}`: ''}</p>
+                            </Card.Section>
+                        </Card>
                 </Layout.Section>
                 <Layout.Section>
                     <PageActions
@@ -239,3 +197,4 @@ export function DiscountProductCreate() {
         </Page>
     )
 }
+

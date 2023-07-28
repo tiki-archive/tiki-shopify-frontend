@@ -1,26 +1,26 @@
+/*
+ * Copyright (c) TIKI Inc.
+ * MIT license. See LICENSE file in root directory.
+ */
+
 import {
   Card,
   Page,
   Layout,
   TextContainer,
-  Image,
   Stack,
   Link,
   Heading
 } from '@shopify/polaris'
-<<<<<<< Updated upstream
 import { TitleBar } from '@shopify/app-bridge-react'
 import React from 'react'
-=======
->>>>>>> Stashed changes
+
+import React from 'react'
+// import { TitleBar } from '@shopify/app-bridge-react'
 
 export function HomePage () {
   return (
     <Page narrowWidth>
-<<<<<<< Updated upstream
-      <TitleBar title="TIKI" />
-=======
->>>>>>> Stashed changes
       <Layout>
         <Layout.Section>
           <Card sectioned>

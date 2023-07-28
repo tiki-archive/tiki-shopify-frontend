@@ -1,21 +1,19 @@
-import { RecurringPaymentType, UsageLimitsCard } from "@shopify/discount-app-components";
-import React, { useCallback } from "react";
+/*
+ * Copyright (c) TIKI Inc.
+ * MIT license. See LICENSE file in root directory.
+ */
+
+import React from 'react';
+import { Checkbox } from "@shopify/polaris";
+import { useCallback } from "react";
 import { useState } from "react";
 
-export const MaxUsageCard = ({onChange}) => {
-    const [totalUsageLimit, setTotalUsageLimit] = useState<number | null>(null);
+export const MaxUsageCheckbox = ({onChange = console.log}) => {
     const [oncePerCustomer, setOncePerCustomer] = useState<boolean>(false);
   
-    const totalUsageUpdate = useCallback(
-        (value: number) => {
-            setTotalUsageLimit(value)
-            onChange({totalUsage: value})
-        },
-        [totalUsageLimit]
-    )
-
     const oncePerCustomerUpdate = useCallback(
         (value: boolean) => {
+            console.log(value)
             setOncePerCustomer(value)
             onChange({oncePerCustomer: value})
         },
@@ -23,14 +21,10 @@ export const MaxUsageCard = ({onChange}) => {
     )
 
     return (
-      <UsageLimitsCard
-        totalUsageLimit={{
-          value: totalUsageLimit,
-          onChange: totalUsageUpdate,
-        }}
-        oncePerCustomer={{
-          value: oncePerCustomer,
-          onChange: oncePerCustomerUpdate,
-        }}
+      <Checkbox
+            value='oncePerCustomer'
+            checked={oncePerCustomer}
+            onChange={oncePerCustomerUpdate} 
+            label='Limit to one use per customer'
       />
     )};

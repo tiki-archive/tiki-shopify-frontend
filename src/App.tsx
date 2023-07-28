@@ -1,6 +1,9 @@
-import React from "react";
-
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+/*
+ * Copyright (c) TIKI Inc.
+ * MIT license. See LICENSE file in root directory.
+ */
+import React from 'react';
+import { BrowserRouter } from "react-router-dom";
 import {
   AppBridgeProvider,
   QueryProvider,
