@@ -1,31 +1,47 @@
-import { DiscountMethod, SummaryCard } from "@shopify/discount-app-components"
-import { TextField, VerticalStack } from "@shopify/polaris"
-import React, { useState } from "react"
+/*
+ * Copyright (c) TIKI Inc.
+ * MIT license. See LICENSE file in root directory.
+ */
 
-export function SummarySection({title, startsAt, endsAt}){
+import React from 'react';
+import { DiscountMethod, DiscountStatus, RequirementType, SummaryCard } from "@shopify/discount-app-components"
+
+interface SummaryProps{
+    title: string,
+    reqType: RequirementType,
+    subtotal: number, 
+    quantity: number, 
+    oncePerCustomer: boolean, 
+    totalUsageLimit: number, 
+    startDate: Date, 
+    endDate: Date
+}
+
+export function SummarySection({title, reqType, subtotal, quantity, oncePerCustomer, totalUsageLimit, startDate, endDate}: SummaryProps){
     return (
         <SummaryCard
             header={{
                 discountMethod: DiscountMethod.Automatic,
+                discountStatus: DiscountStatus.Active,
                 discountDescriptor: title,
                 appDiscountType: 'TIKI',
-                isEditing: false 
+                isEditing: true 
             }}
             minimumRequirements={{
-                requirementType: '',
-                subtotal: 0,
-                quantity: 0,
+                requirementType: reqType,
+                subtotal,
+                quantity,
             }}
             usageLimits={{
-                oncePerCustomer: true,
-                totalUsageLimit: 0
+                oncePerCustomer,
+                totalUsageLimit
             }}
             activeDates={{
-                startDate: startsAt.value,
-                endDate: endsAt?.value ?? undefined
+                startDate,
+                endDate
             }} 
             performance={{
-            isEditing: false
+                isEditing: true
             }}                    
         />
     )

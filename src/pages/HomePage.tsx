@@ -8,13 +8,19 @@ import {
   Link,
   Heading
 } from '@shopify/polaris'
+<<<<<<< Updated upstream
 import { TitleBar } from '@shopify/app-bridge-react'
 import React from 'react'
+=======
+>>>>>>> Stashed changes
 
 export function HomePage () {
   return (
     <Page narrowWidth>
+<<<<<<< Updated upstream
       <TitleBar title="TIKI" />
+=======
+>>>>>>> Stashed changes
       <Layout>
         <Layout.Section>
           <Card sectioned>
