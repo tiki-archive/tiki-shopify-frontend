@@ -15,9 +15,6 @@ import {
 import { TitleBar } from '@shopify/app-bridge-react'
 import React from 'react'
 
-import React from 'react'
-// import { TitleBar } from '@shopify/app-bridge-react'
-
 export function HomePage () {
   return (
     <Page narrowWidth>

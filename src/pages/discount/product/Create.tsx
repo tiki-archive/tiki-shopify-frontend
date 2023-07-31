@@ -16,7 +16,8 @@ import {
     DiscountAmount,
     CombinationsCard,
     AppliesToChoices,
-    TitleAndDescription} from '../../../components'
+    TitleAndDescription,
+    DiscountSummary} from '../../../components'
 import { useState } from "react"
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticatedFetch'
@@ -32,10 +33,10 @@ export function DiscountProductCreate() {
     const [fields, setFields] = useState<DiscountReq>({
         "title": "",
         "startsAt": new Date(),
-        "endsAt": null,
+        "endsAt": undefined,
+        "description": "",
         "metafields": {
             "type": "product",
-            "description": "",
             "discountType": "amount",
             "discountValue": 10,
             "minValue": 0,
@@ -81,7 +82,7 @@ export function DiscountProductCreate() {
                             <Card.Section title="Title">
                                 <TitleAndDescription onChange={(values) => {
                                     fields.title = values.title
-                                    fields.metafields.description = values.description
+                                    fields.description = values.description
                                     setFields(fields)
                                 }} />
                             </Card.Section>
@@ -151,7 +152,7 @@ export function DiscountProductCreate() {
                         <ActiveDatesCard
                             onChange={(s: string, e: string) => {
                                 fields.startsAt = new Date(s)
-                                fields.endsAt = e ? new Date(e) : null
+                                fields.endsAt = e ? new Date(e) : undefined
                                 setFields(fields)
                             }}
                             startsAt={fields.startsAt.toUTCString()}
@@ -159,31 +160,18 @@ export function DiscountProductCreate() {
                     </form>
                 </Layout.Section>
                 <Layout.Section secondary>
-                        <Card>
-                            <Card.Section title="Title">
-                                <p>Title: {fields.title}</p>
-                                <p>Description: {fields.metafields.description}</p>
-                            </Card.Section>
-                            <Card.Section title="Value">
-                                <p>Discount Type: {fields.metafields.discountType}</p>
-                                <p>Discount Value: {fields.metafields.discountType === 'amount' ? '$':''} {fields.metafields.discountValue}{fields.metafields.discountType === 'percentage' ? '%':''}</p>
-                            </Card.Section>
-                            <Card.Section title="Minimum Requirements">
-                                <p>{fields.metafields.minValue ? `Minimum value:${fields.metafields.minValue}` : ''}</p>
-                                <p>{fields.metafields.minQty ? `Minimum quantity:${fields.metafields.minQty}` : ''}</p>
-                            </Card.Section>
-                        </Card>
-                        <Card>
-                            <Card.Section title="Combines with">
-                                <p>Order Discounts: {fields.combinesWith.orderDiscounts ? 'Yes': 'No'}</p>
-                                <p>Product Discounts: {fields.combinesWith.productDiscounts ? 'Yes': 'No'}</p>
-                                <p>Shipping Discounts: {fields.combinesWith.shippingDiscounts ? 'Yes': 'No'}</p>
-                            </Card.Section>
-                            <Card.Section title="Active dates">
-                                <p>Starts at: {fields.startsAt.toLocaleTimeString()}</p>
-                                <p>{fields.endsAt ? `Ends at: ${fields.endsAt!.toLocaleDateString()}`: ''}</p>
-                            </Card.Section>
-                        </Card>
+                    <DiscountSummary 
+                        title={fields.title}
+                        description={fields.description}
+                        discountType={fields.metafields.discountType}
+                        discountValue={fields.metafields.discountValue}
+                        minValue={fields.metafields.minValue}
+                        minQty={fields.metafields.minQty}
+                        onePerUser={fields.metafields.onePerUser}
+                        combinesWith={fields.combinesWith}
+                        startsAt={fields.startsAt}
+                        endsAt={fields.endsAt}
+                    />
                 </Layout.Section>
                 <Layout.Section>
                     <PageActions
