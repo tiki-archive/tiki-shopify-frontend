@@ -23,5 +23,5 @@
     "include": [
         "src",
         "src/index.js"
-    ]
+, "custom.d.ts"    ]
 }
